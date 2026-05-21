@@ -14,21 +14,28 @@ These URLs always serve the latest published release — safe to embed on landin
 
 - **macOS (Apple Silicon)** — [`ANW.Desktop_aarch64.dmg`](https://github.com/welt-weit/anw-downloads/releases/latest/download/ANW.Desktop_aarch64.dmg)
 - **macOS (Intel)** — [`ANW.Desktop_x64.dmg`](https://github.com/welt-weit/anw-downloads/releases/latest/download/ANW.Desktop_x64.dmg)
+- **Linux (x86_64)** — [`ANW.Desktop_amd64.AppImage`](https://github.com/welt-weit/anw-downloads/releases/latest/download/ANW.Desktop_amd64.AppImage)
 
 Versioned filenames (e.g. `ANW.Desktop_0.0.13_aarch64.dmg`) are also attached to each release for traceability.
 
+**Linux usage:** AppImage is a self-contained portable runnable — no install required, no root needed. After download: `chmod +x ANW.Desktop_amd64.AppImage && ./ANW.Desktop_amd64.AppImage`. The in-app auto-updater replaces the AppImage in place.
+
 ## What's in each release
 
-| File | Purpose |
-|---|---|
-| `ANW.Desktop_<version>_aarch64.dmg` | Apple Silicon installer (versioned) |
-| `ANW.Desktop_<version>_x64.dmg` | Intel installer (versioned) |
-| `ANW.Desktop_aarch64.dmg` | Apple Silicon installer (stable alias) |
-| `ANW.Desktop_x64.dmg` | Intel installer (stable alias) |
-| `ANW.Desktop_aarch64.app.tar.gz` + `.sig` | Updater payload + minisign signature (Apple Silicon) |
-| `ANW.Desktop_x64.app.tar.gz` + `.sig` | Updater payload + minisign signature (Intel) |
-| `latest.json` | Update manifest the auto-updater fetches |
-| `anw-desktop-rust-sbom.cdx.json` | Software Bill of Materials (CycloneDX, Rust deps) |
+| File | Platform | Purpose |
+|---|---|---|
+| `ANW.Desktop_<version>_aarch64.dmg` | macOS Apple Silicon | Installer (versioned) |
+| `ANW.Desktop_<version>_x64.dmg` | macOS Intel | Installer (versioned) |
+| `ANW.Desktop_<version>_amd64.AppImage` | Linux x86_64 | Portable runnable (versioned) |
+| `ANW.Desktop_<version>_amd64.deb` | Linux (Debian/Ubuntu) | Native `.deb` package |
+| `anw-desktop-<version>-1.x86_64.rpm` | Linux (Fedora/RHEL) | Native `.rpm` package |
+| `ANW.Desktop_aarch64.dmg` | macOS Apple Silicon | Installer (stable alias) |
+| `ANW.Desktop_x64.dmg` | macOS Intel | Installer (stable alias) |
+| `ANW.Desktop_amd64.AppImage` | Linux x86_64 | Portable runnable (stable alias) |
+| `*.app.tar.gz` + `.sig` | macOS | Updater payload + minisign signature |
+| `*.AppImage.tar.gz` + `.sig` | Linux | Updater payload + minisign signature |
+| `latest.json` | All | Update manifest the auto-updater fetches |
+| `anw-desktop-rust-sbom.cdx.json` | All | Software Bill of Materials (CycloneDX, Rust deps) |
 
 ## How releases get here
 
