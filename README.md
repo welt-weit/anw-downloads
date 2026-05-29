@@ -17,7 +17,7 @@ A Manifest V3 extension for sending selected text + the current page to ANW for 
 
 **Install (Chrome/Edge, load unpacked):**
 
-1. Download `anw-curator-v0.1.0.zip` from Releases and **unzip** it (Chrome loads a folder, not the zip).
+1. Download `anw-curator-v0.1.1.zip` from Releases and **unzip** it (Chrome loads a folder, not the zip).
 2. **Move the folder somewhere permanent** (e.g. `~/anw-curator/`) — *not* Downloads or a temp dir. Chrome reads it from that path on every launch, so moving or deleting it breaks the extension. (Cloned the repo? Just point at [`extensions/anw-curator/`](extensions/anw-curator/) directly.)
 3. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, select the `anw-curator` folder.
 4. Click the toolbar icon → **Options** → paste your `anw_…` API token → **Save** → **Test token**.

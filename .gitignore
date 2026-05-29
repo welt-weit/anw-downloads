@@ -1,2 +1,5 @@
 # Built extension packages — released as GitHub Release assets, not committed.
 extensions/anw-curator/dist/
+
+# macOS
+.DS_Store

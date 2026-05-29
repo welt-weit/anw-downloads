@@ -9,7 +9,7 @@ Chrome installs this from a **folder**, not the zip — and it reads that folder
 from disk every time the browser starts. So the folder has to live somewhere
 permanent.
 
-1. Download `anw-curator-v0.1.0.zip` from the [Releases page](https://github.com/welt-weit/anw-downloads/releases) and **unzip it**. (You can't pick the `.zip` directly in Chrome — it needs the unzipped folder.)
+1. Download `anw-curator-v0.1.1.zip` from the [Releases page](https://github.com/welt-weit/anw-downloads/releases) and **unzip it**. (You can't pick the `.zip` directly in Chrome — it needs the unzipped folder.)
 2. **Move the unzipped `anw-curator` folder to a permanent location** — e.g. `~/anw-curator/` or inside `~/Documents/`. **Not** Downloads, Desktop-temp, or `/tmp`: if the folder is later moved, renamed, or deleted, the extension breaks on the next browser launch ("manifest file is missing or unreadable") and disappears.
 3. Open `chrome://extensions` (or `edge://extensions`).
 4. Enable **Developer mode** (top-right toggle).
@@ -67,10 +67,19 @@ manifest.json   MV3 manifest
 background.js    Service worker — fetch, context menu, keyboard command
 popup.html/.js   Toolbar popup (review-before-send)
 options.html/.js Token entry + "Test token"
-icons/           16 / 48 / 128 px (placeholder blue squares — replace before any public listing)
+icon.svg         Master logo (vector source)
+icons/           16 / 48 / 128 px PNGs, generated from icon.svg
+build.sh         Packages dist/anw-curator-v<version>.zip
+```
+
+Regenerate the PNGs after editing `icon.svg`:
+
+```bash
+for s in 16 48 128; do rsvg-convert -w $s -h $s icon.svg -o icons/icon-$s.png; done
 ```
 
 ## Status
 
-v0.1.0 — Phases 1–2 (scaffold + core flow) complete. Not yet done: badge
-counter, submission history, and the release build script / GitHub Action.
+v0.1.1 — Phases 1–4 complete (scaffold, core flow, badge + history, zip
+distribution). Remaining items are API-side: issuable/scoped/revocable `anw_`
+tokens, and Bearer support on the token-test endpoint.
