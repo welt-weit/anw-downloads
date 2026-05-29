@@ -59,6 +59,35 @@ async function setBadge(count) {
   await chrome.action.setBadgeText({ text: count ? String(count) : "" });
 }
 
+// Transient status on the toolbar icon for background submits (context menu /
+// keyboard), where no popup is open to show progress. Reverts to the daily
+// count after `revertMs`. (Best-effort: a short timer may not fire if the
+// service worker is torn down first; the next event re-syncs the badge.)
+async function flashBadge(text, color, title, revertMs) {
+  await chrome.action.setBadgeBackgroundColor({ color });
+  await chrome.action.setBadgeText({ text });
+  if (title) await chrome.action.setTitle({ title });
+  if (revertMs) {
+    setTimeout(() => {
+      refreshBadge();
+      chrome.action.setTitle({ title: "Send to ANW Curator" });
+    }, revertMs);
+  }
+}
+
+// One submit path for all three triggers, with icon feedback + a result object.
+async function runSubmit(payload) {
+  await flashBadge("…", "#a16207", "ANW Curator — sending…"); // amber, pending
+  try {
+    const result = await submitCuration(payload); // sets count badge on success
+    await flashBadge("✓", "#15803d", "ANW Curator — sent ✓", 2500);
+    return { ok: true, result };
+  } catch (err) {
+    await flashBadge("!", "#b91c1c", `ANW Curator — failed: ${err.message}`, 5000);
+    return { ok: false, error: err.message };
+  }
+}
+
 // Reset the badge to today's count (0 → cleared) on startup / new day.
 async function refreshBadge() {
   const { submitStats } = await chrome.storage.local.get("submitStats");
@@ -149,9 +178,7 @@ chrome.runtime.onStartup.addListener(refreshBadge);
 // Messages from popup / options.
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === "submit") {
-    submitCuration(msg.payload)
-      .then((result) => sendResponse({ ok: true, result }))
-      .catch((err) => sendResponse({ ok: false, error: err.message }));
+    runSubmit(msg.payload).then(sendResponse);
     return true; // keep channel open for async response
   }
   if (msg?.type === "testToken") {
@@ -163,16 +190,13 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 // Right-click on a selection → direct submit with toast feedback.
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== CONTEXT_MENU_ID) return;
-  try {
-    await submitCuration({
-      text: info.selectionText,
-      sourceUrl: info.pageUrl || tab?.url,
-      note: "",
-    });
-    notify("ANW Curator", "Selection sent ✓");
-  } catch (err) {
-    notify("ANW Curator — failed", err.message);
-  }
+  const r = await runSubmit({
+    text: info.selectionText,
+    sourceUrl: info.pageUrl || tab?.url,
+    note: "",
+  });
+  if (r.ok) notify("ANW Curator", "Selection sent ✓");
+  else notify("ANW Curator — failed", r.error);
 });
 
 // Keyboard shortcut → grab selection from the active tab and submit.
@@ -181,10 +205,7 @@ chrome.commands.onCommand.addListener(async (command) => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) return;
   const selection = await readSelection(tab.id);
-  try {
-    await submitCuration({ text: selection, sourceUrl: tab.url, note: "" });
-    notify("ANW Curator", selection ? "Selection sent ✓" : "Page sent ✓");
-  } catch (err) {
-    notify("ANW Curator — failed", err.message);
-  }
+  const r = await runSubmit({ text: selection, sourceUrl: tab.url, note: "" });
+  if (r.ok) notify("ANW Curator", selection ? "Selection sent ✓" : "Page sent ✓");
+  else notify("ANW Curator — failed", r.error);
 });

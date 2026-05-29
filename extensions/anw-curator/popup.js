@@ -72,6 +72,14 @@ async function renderHistory() {
   }
 }
 
+// Resolve to `fallback` if `promise` hasn't settled within `ms`.
+function withTimeout(promise, ms, fallback) {
+  return Promise.race([
+    promise,
+    new Promise((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
 async function readSelection(tabId) {
   try {
     const [{ result }] = await chrome.scripting.executeScript({
@@ -101,9 +109,14 @@ async function init() {
   state.url = tab?.url || "";
   els.url.textContent = state.url || "(unknown)";
 
-  if (tab?.id) {
-    state.selection = await readSelection(tab.id);
-  }
+  // Paint history immediately — it doesn't depend on the page.
+  renderHistory();
+
+  // Read the page selection, but never let a heavy page stall the popup:
+  // fall back to "no selection" after a short timeout.
+  state.selection = tab?.id
+    ? await withTimeout(readSelection(tab.id), 1200, "")
+    : "";
   if (state.selection) {
     els.selection.textContent = state.selection;
     els.selection.classList.remove("empty");
@@ -118,8 +131,6 @@ async function init() {
       `${host} pages need a text selection — the bare URL won't be useful. Select the relevant text first.`;
     if (anwToken) els.send.disabled = true;
   }
-
-  await renderHistory();
 }
 
 els.send.addEventListener("click", async () => {
