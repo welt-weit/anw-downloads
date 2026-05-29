@@ -1,12 +1,27 @@
 # anw-downloads
 
-Public release artifacts for the ANW desktop app and (future) other ANW installers.
+Public release artifacts for the ANW desktop app, plus the source for the **ANW Curator** browser extension.
 
-**This repository contains no source code.** It exists to host signed installer binaries on a public URL so the in-app auto-updater (which runs without GitHub authentication on end-user machines) can fetch them.
+This repo serves two purposes:
+
+1. **Desktop installer mirror.** It hosts signed installer binaries on a public URL so the in-app auto-updater (which runs without GitHub authentication on end-user machines) can fetch them. The desktop app's *source* stays private in [`welt-weit/anw-desktop`](https://github.com/welt-weit/anw-desktop) — only its build artifacts are mirrored here.
+2. **Curator extension source + distribution.** The ANW Curator browser extension lives in [`extensions/anw-curator/`](extensions/anw-curator/) and is distributed as a `.zip` from this repo's GitHub Releases. Its source is public on purpose: it's a small client-side JavaScript tool with no embedded secrets (the API token is the user's own, entered at runtime), so there's nothing to hide — and being JS, it's inspectable regardless of where it's hosted.
 
 ## Why a separate repo?
 
 The source code lives in [`welt-weit/anw-desktop`](https://github.com/welt-weit/anw-desktop), which is private. Tauri's updater plugin makes anonymous HTTP requests to `releases/latest/download/latest.json` from installed user machines — those requests can't authenticate, so a private repo returns 404 to them. By mirroring release artifacts to this public repo, the updater can fetch what it needs without exposing source.
+
+## ANW Curator browser extension
+
+A Manifest V3 extension for sending selected text + the current page to ANW for curation. Source lives in [`extensions/anw-curator/`](extensions/anw-curator/); packaged builds ship as `anw-curator-v*.zip` on the [Releases page](https://github.com/welt-weit/anw-downloads/releases) (tagged `curator-v*`, separate from the desktop app).
+
+**Install (Chrome/Edge, load unpacked):**
+
+1. Download `anw-curator-v0.1.0.zip` from Releases and unzip — or clone this repo and use the folder directly.
+2. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, select the `anw-curator` folder.
+3. Click the toolbar icon → **Options** → paste your `anw_…` API token → **Save** → **Test token**.
+
+Then use the toolbar button (review-before-send), the right-click **Send selection to ANW**, or `Ctrl/Cmd+Shift+A`. Full details in the [extension README](extensions/anw-curator/README.md).
 
 ## Download links
 
@@ -96,7 +111,7 @@ Other:
 
 A GitHub Actions job in `welt-weit/anw-desktop` builds, signs (where applicable), and notarises (macOS) each release, then mirrors all artifacts here. See [`welt-weit/anw-desktop/docs/DEPLOYMENT.md`](https://github.com/welt-weit/anw-desktop/blob/main/docs/DEPLOYMENT.md) for the full release runbook.
 
-Manual edits to this repo's releases are unsupported — they'll get overwritten by the next mirror run for the same tag.
+Manual edits to the **desktop** releases are unsupported — they'll get overwritten by the next mirror run for the same tag. (Curator extension releases use their own `curator-v*` tags and are not touched by the desktop mirror.)
 
 ## Verifying integrity
 

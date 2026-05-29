@@ -1,0 +1,27 @@
+name: Curator extension release
+
+# Builds the ANW Curator extension zip and attaches it to a GitHub Release.
+# Triggered by pushing a tag like `curator-v0.1.0`. Uses its own tag namespace
+# so it never collides with the desktop-app mirror.
+on:
+  push:
+    tags:
+      - "curator-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build zip
+        run: bash extensions/anw-curator/build.sh
+
+      - name: Attach to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: extensions/anw-curator/dist/anw-curator-*.zip
+          fail_on_unmatched_files: true

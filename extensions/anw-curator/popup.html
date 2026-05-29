@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ANW Curator</title>
+    <style>
+      :root {
+        --fg: #1a1a1a;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --accent: #1d4ed8;
+        --bad: #b91c1c;
+        --good: #15803d;
+      }
+      * { box-sizing: border-box; }
+      body {
+        font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        color: var(--fg);
+        margin: 0;
+        width: 340px;
+      }
+      header {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
+      }
+      main { padding: 12px 14px; }
+      .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+      .url {
+        word-break: break-all;
+        font-size: 12px;
+        margin-bottom: 12px;
+        color: var(--fg);
+      }
+      .selection {
+        max-height: 92px;
+        overflow: auto;
+        background: #f9fafb;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 8px;
+        white-space: pre-wrap;
+        margin-bottom: 12px;
+        font-size: 12px;
+      }
+      .selection.empty { color: var(--muted); font-style: italic; }
+      textarea {
+        width: 100%;
+        min-height: 52px;
+        resize: vertical;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 8px;
+        font: inherit;
+        margin-bottom: 12px;
+      }
+      .warn {
+        background: #fffbeb;
+        border: 1px solid #fcd34d;
+        color: #92400e;
+        border-radius: 6px;
+        padding: 8px;
+        margin-bottom: 12px;
+        font-size: 12px;
+        display: none;
+      }
+      button {
+        width: 100%;
+        padding: 9px;
+        border: 0;
+        border-radius: 6px;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled { opacity: .55; cursor: default; }
+      .status { margin-top: 10px; font-size: 12px; min-height: 16px; }
+      .status.bad { color: var(--bad); }
+      .status.good { color: var(--good); }
+      .link { color: var(--accent); cursor: pointer; text-decoration: underline; }
+      .history { margin-top: 14px; }
+      .history .label { margin-top: 0; }
+      .hist-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 3px 0;
+        font-size: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .hist-row .ago { color: var(--muted); white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <header>ANW Curator</header>
+    <main>
+      <div class="label">Source</div>
+      <div class="url" id="url">…</div>
+
+      <div class="label">Selection</div>
+      <div class="selection empty" id="selection">No text selected — the page URL will be sent.</div>
+
+      <div class="warn" id="warn"></div>
+
+      <div class="label">Note (optional)</div>
+      <textarea id="note" placeholder="Why is this worth curating?"></textarea>
+
+      <button id="send">Send to ANW</button>
+      <div class="status" id="status"></div>
+
+      <div class="history" id="history"></div>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

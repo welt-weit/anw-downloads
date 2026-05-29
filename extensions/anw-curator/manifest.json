@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "ANW Curator",
+  "version": "0.1.0",
+  "description": "Send selected text and the current page to Action Network World for curation.",
+  "permissions": ["activeTab", "storage", "contextMenus", "scripting", "notifications"],
+  "host_permissions": ["https://api.actionnetwork.world/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Send to ANW Curator",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "send-selection": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+A",
+        "mac": "Command+Shift+A"
+      },
+      "description": "Send current selection to ANW"
+    }
+  }
+}
