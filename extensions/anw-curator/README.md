@@ -5,11 +5,30 @@ current page to Action Network World for curation.
 
 ## Install (load unpacked)
 
-1. Download `anw-curator-v0.1.0.zip` from the [Releases page](https://github.com/welt-weit/anw-downloads/releases) and unzip it — or clone this repo and use this folder directly.
-2. Open `chrome://extensions` (or `edge://extensions`).
-3. Enable **Developer mode** (top-right toggle).
-4. Click **Load unpacked** and select the `anw-curator` folder.
-5. Click the toolbar icon → **Options** (or right-click the icon → Options) → paste your `anw_…` token → **Save**. Hit **Test token** to confirm it's valid.
+Chrome installs this from a **folder**, not the zip — and it reads that folder
+from disk every time the browser starts. So the folder has to live somewhere
+permanent.
+
+1. Download `anw-curator-v0.1.0.zip` from the [Releases page](https://github.com/welt-weit/anw-downloads/releases) and **unzip it**. (You can't pick the `.zip` directly in Chrome — it needs the unzipped folder.)
+2. **Move the unzipped `anw-curator` folder to a permanent location** — e.g. `~/anw-curator/` or inside `~/Documents/`. **Not** Downloads, Desktop-temp, or `/tmp`: if the folder is later moved, renamed, or deleted, the extension breaks on the next browser launch ("manifest file is missing or unreadable") and disappears.
+3. Open `chrome://extensions` (or `edge://extensions`).
+4. Enable **Developer mode** (top-right toggle).
+5. Click **Load unpacked** and select that `anw-curator` folder.
+6. Click the toolbar icon → **Options** (or right-click the icon → Options) → paste your `anw_…` token → **Save**. Hit **Test token** to confirm it's valid.
+
+> Already cloned this repo? Skip the download — point **Load unpacked** straight
+> at this folder. It's permanent, and `git pull` updates it in place.
+
+## Updating to a new version
+
+The folder is loaded by path, so updating means replacing its contents, not
+re-installing:
+
+1. Download the new zip, unzip it, and **replace the contents of the same folder** (or `git pull` if you loaded from a clone).
+2. Go to `chrome://extensions` and click the **reload ↻** icon on the ANW Curator card.
+
+Your saved token lives in `chrome.storage.local` and survives reloads and
+version bumps — you won't need to re-enter it.
 
 ## Use
 
