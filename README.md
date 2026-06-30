@@ -1,11 +1,12 @@
 # anw-downloads
 
-Public release artifacts for the ANW desktop app, plus the source for the **ANW Curator** browser extension.
+Public release artifacts for the ANW **desktop** and **mobile** apps, plus the source for the **ANW Curator** browser extension.
 
-This repo serves two purposes:
+This repo serves three purposes:
 
 1. **Desktop installer mirror.** It hosts signed installer binaries on a public URL so the in-app auto-updater (which runs without GitHub authentication on end-user machines) can fetch them. The desktop app's *source* stays private in [`welt-weit/anw-desktop`](https://github.com/welt-weit/anw-desktop) — only its build artifacts are mirrored here.
-2. **Curator extension source + distribution.** The ANW Curator browser extension lives in [`extensions/anw-curator/`](extensions/anw-curator/) and is distributed as a `.zip` from this repo's GitHub Releases. Its source is public on purpose: it's a small client-side JavaScript tool with no embedded secrets (the API token is the user's own, entered at runtime), so there's nothing to hide — and being JS, it's inspectable regardless of where it's hosted.
+2. **Mobile beta mirror.** The NGOstack mobile app's signed **Android APK** is mirrored here for sideload download (tagged `mobile-v*` / rolling `mobile-latest`) — see [Mobile (beta)](#mobile-beta). Source stays private in [`welt-weit/anw-mobile`](https://github.com/welt-weit/anw-mobile); iOS betas go through TestFlight, not this repo.
+3. **Curator extension source + distribution.** The ANW Curator browser extension lives in [`extensions/anw-curator/`](extensions/anw-curator/) and is distributed as a `.zip` from this repo's GitHub Releases. Its source is public on purpose: it's a small client-side JavaScript tool with no embedded secrets (the API token is the user's own, entered at runtime), so there's nothing to hide — and being JS, it's inspectable regardless of where it's hosted.
 
 ## Why a separate repo?
 
@@ -36,6 +37,20 @@ These URLs always serve the latest published release — safe to embed on landin
 - **Windows (x86_64)** — [`ANW.Desktop_x64-setup.exe`](https://github.com/welt-weit/anw-downloads/releases/latest/download/ANW.Desktop_x64-setup.exe)
 
 Versioned filenames (e.g. `ANW.Desktop_0.0.17_aarch64.dmg`) are also attached to each release for traceability. Linux Debian/Ubuntu users can grab the versioned `.deb`; Fedora/RHEL users the `.rpm` — both from the [release page](https://github.com/welt-weit/anw-downloads/releases/latest).
+
+## Mobile (beta)
+
+The **NGOstack mobile app** (the field companion — Projects, Workspaces, on-device evidence) ships its beta here too. A CI job in [`welt-weit/anw-mobile`](https://github.com/welt-weit/anw-mobile) mirrors the signed build on each `mobile-v*` tag.
+
+**Android** — sideload the signed APK (scan the QR / open this link *on the phone*):
+
+- **[`ANW.Mobile_universal.apk`](https://github.com/welt-weit/anw-downloads/releases/download/mobile-latest/ANW.Mobile_universal.apk)** — always the latest beta (arm64 + armv7).
+
+> NB: this is the `mobile-latest` *fixed-tag* URL (`releases/download/mobile-latest/…`), **not** `releases/latest/download/…` — the latter is the desktop app's "Latest" pointer. Mobile releases are always **pre-release**, so they never affect it.
+
+First install shows a one-time **"install from unknown sources"** prompt — expected for a sideloaded beta. Verify the download against **`SHA256SUMS.txt`** on the [`mobile-latest` release](https://github.com/welt-weit/anw-downloads/releases/tag/mobile-latest). Versioned builds (`ANW.Mobile_<version>_universal.apk`) are attached to each `mobile-v*` release for traceability.
+
+**iOS** — via **TestFlight** (Apple doesn't permit public sideloading); the join link will be posted here once external testing is set up.
 
 ## Per-platform install notes
 
